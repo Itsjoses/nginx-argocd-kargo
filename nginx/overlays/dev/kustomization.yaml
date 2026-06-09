@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+                                                                                                                                                  
+resources:
+  - ../../base
+
+images:                                                                                                                                               
+  name: nginx                                                                                                                                       
+  newName: harbor.cluster.com/library/nginx                                                                                                         
+  newTag: "1.31"  
+
+patches:
+  - target:
+      kind: Deployment
+      name: nginx                                                                      
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 2
