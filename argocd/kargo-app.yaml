@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kargo-resources
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
+    targetRevision: HEAD
+    path: kargo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nginx-kargo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
