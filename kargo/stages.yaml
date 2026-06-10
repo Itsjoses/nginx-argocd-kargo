@@ -22,55 +22,55 @@ spec:
               value: nginx/overlays/dev
             - name: argoApp
               value: nginx-dev
-# ---
-# apiVersion: kargo.akuity.io/v1alpha1
-# kind: Stage
-# metadata:
-#   name: staging
-#   namespace: nginx-kargo
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "2"
-# spec:
-#   requestedFreight:
-#     - origin:
-#         kind: Warehouse
-#         name: nginx-warehouse
-#       sources:
-#         stages:
-#           - dev
-#   promotionTemplate:
-#     spec:
-#       steps:
-#         - task:
-#             name: nginx-promo
-#           vars:
-#             - name: overlayPath
-#               value: nginx/overlays/staging
-#             - name: argoApp
-#               value: nginx-staging
-# ---
-# apiVersion: kargo.akuity.io/v1alpha1
-# kind: Stage
-# metadata:
-#   name: prod
-#   namespace: nginx-kargo
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "2"
-# spec:
-#   requestedFreight:
-#     - origin:
-#         kind: Warehouse
-#         name: nginx-warehouse
-#       sources:
-#         stages:
-#           - staging
-#   promotionTemplate:
-#     spec:
-#       steps:
-#         - task:
-#             name: nginx-promo
-#           vars:
-#             - name: overlayPath
-#               value: nginx/overlays/prod
-#             - name: argoApp
-#               value: nginx-prod
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: staging
+  namespace: nginx-kargo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: nginx-warehouse
+      sources:
+        stages:
+          - dev
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: nginx-promo
+          vars:
+            - name: overlayPath
+              value: nginx/overlays/staging
+            - name: argoApp
+              value: nginx-staging
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: prod
+  namespace: nginx-kargo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: nginx-warehouse
+      sources:
+        stages:
+          - staging
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: nginx-promo
+          vars:
+            - name: overlayPath
+              value: nginx/overlays/prod
+            - name: argoApp
+              value: nginx-prod
