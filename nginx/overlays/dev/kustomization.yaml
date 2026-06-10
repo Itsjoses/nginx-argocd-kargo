@@ -4,7 +4,7 @@ resources:
 - ../../base
 images:
 - name: my-harbor-core.harbor.svc.cluster.local/library/nginx
-  newTag: 1.30.2
+  newTag: 1.27.0
 - name: nginx
   newName: harbor.cluster.com/library/nginx
   newTag: "1.31"
