@@ -8,6 +8,6 @@ metadata:
 spec:
   subscriptions:
     - image:
-        repoURL: harbor.cluster.com/library/nginx
+        repoURL: my-harbor-core.harbor.svc.cluster.local/library/nginx
     - git:
         repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
