@@ -26,7 +26,7 @@ spec:
       # nginx + dev -> nginx-dev
       name: "{{ .app }}-{{ .env }}"
       annotations:
-        kargo.akuity.io/authorized-stage: "nginx-kargo:{{ .app }}-{{ .env }}"
+        kargo.akuity.io/authorized-stage: "nginx-kargo:{{ .env }}"
     spec:
       project: default
       source:
