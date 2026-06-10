@@ -25,6 +25,8 @@ spec:
     metadata:
       # nginx + dev -> nginx-dev
       name: "{{ .app }}-{{ .env }}"
+      annotations:
+        kargo.akuity.io/authorized-stage: "nginx-kargo:{{ .app }}-{{ .env }}"
     spec:
       project: default
       source:
