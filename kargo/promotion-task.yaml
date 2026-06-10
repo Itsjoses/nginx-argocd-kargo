@@ -48,4 +48,4 @@ spec:
           - name: ${{ vars.argoApp }}
             sources:
               - repoURL: ${{ vars.gitopsRepo }}
-                desiredCommitFromStep: commit
+                desiredRevision: ${{ task.outputs.commit.commit }}
