@@ -1,52 +1,27 @@
-# apiVersion: kargo.akuity.io/v1alpha1
-# kind: Stage
-# metadata:
-#   name: dev
-#   namespace: nginx-kargo
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "2"
-# spec:
-#   requestedFreight:
-#     - origin:
-#         kind: Warehouse
-#         name: nginx-warehouse
-#       sources:
-#         direct: true
-#   promotionTemplate:
-#     spec:
-#       steps:
-#         - uses: git-clone
-#           config:
-#             repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#             checkout:
-#               - branch: main
-#                 path: ./repo
-
-#         - uses: kustomize-set-image
-#           config:
-#             path: repo/nginx/overlays/dev
-#             images:
-#               - image: harbor.cluster.com/library/nginx
-
-#         - uses: git-commit
-#           as: commit
-#           config:
-#             path: ./repo
-#             messageFromSteps:
-#               - kustomize-set-image
-
-#         - uses: git-push
-#           config:
-#             path: ./repo
-#             targetBranch: main
-
-#         - uses: argocd-update
-#           config:
-#             apps:
-#               - name: nginx-dev
-#                 sources:
-#                   - repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#                     desiredCommitFromStep: commit
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: nginx-kargo
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: nginx-warehouse
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: nginx-promo
+          vars:
+            - name: overlayPath
+              value: nginx/overlays/dev
+            - name: argoApp
+              value: nginx-dev
 # ---
 # apiVersion: kargo.akuity.io/v1alpha1
 # kind: Stage
@@ -66,38 +41,13 @@
 #   promotionTemplate:
 #     spec:
 #       steps:
-#         - uses: git-clone
-#           config:
-#             repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#             checkout:
-#               - branch: main
-#                 path: ./repo
-
-#         - uses: kustomize-set-image
-#           config:
-#             path: repo/nginx/overlays/staging
-#             images:
-#               - image: harbor.cluster.com/library/nginx
-
-#         - uses: git-commit
-#           as: commit
-#           config:
-#             path: ./repo
-#             messageFromSteps:
-#               - kustomize-set-image
-
-#         - uses: git-push
-#           config:
-#             path: ./repo
-#             targetBranch: main
-
-#         - uses: argocd-update
-#           config:
-#             apps:
-#               - name: nginx-staging
-#                 sources:
-#                   - repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#                     desiredCommitFromStep: commit
+#         - task:
+#             name: nginx-promo
+#           vars:
+#             - name: overlayPath
+#               value: nginx/overlays/staging
+#             - name: argoApp
+#               value: nginx-staging
 # ---
 # apiVersion: kargo.akuity.io/v1alpha1
 # kind: Stage
@@ -117,35 +67,10 @@
 #   promotionTemplate:
 #     spec:
 #       steps:
-#         - uses: git-clone
-#           config:
-#             repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#             checkout:
-#               - branch: main
-#                 path: ./repo
-
-#         - uses: kustomize-set-image
-#           config:
-#             path: repo/nginx/overlays/prod
-#             images:
-#               - image: harbor.cluster.com/library/nginx
-
-#         - uses: git-commit
-#           as: commit
-#           config:
-#             path: ./repo
-#             messageFromSteps:
-#               - kustomize-set-image
-
-#         - uses: git-push
-#           config:
-#             path: ./repo
-#             targetBranch: main
-
-#         - uses: argocd-update
-#           config:
-#             apps:
-#               - name: nginx-prod
-#                 sources:
-#                   - repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git
-#                     desiredCommitFromStep: commit
+#         - task:
+#             name: nginx-promo
+#           vars:
+#             - name: overlayPath
+#               value: nginx/overlays/prod
+#             - name: argoApp
+#               value: nginx-prod

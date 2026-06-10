@@ -9,5 +9,7 @@ spec:
   subscriptions:
     - image:
         repoURL: my-harbor-core.harbor.svc.cluster.local/library/nginx
+        allowTags: ".*"
+        discoveryLimit: 10
     - git:
         repoURL: https://github.com/Itsjoses/nginx-argocd-kargo.git

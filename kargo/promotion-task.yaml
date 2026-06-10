@@ -1,0 +1,51 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: PromotionTask
+metadata:
+  name: nginx-promo
+  namespace: nginx-kargo
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  vars:
+    - name: gitopsRepo
+      value: https://github.com/Itsjoses/nginx-argocd-kargo.git
+    - name: imageRepo
+      value: my-harbor-core.harbor.svc.cluster.local/library/nginx
+    - name: overlayPath
+      value: ""
+    - name: argoApp
+      value: ""
+  steps:
+    - uses: git-clone
+      config:
+        repoURL: ${{ vars.gitopsRepo }}
+        checkout:
+          - branch: main
+            path: ./repo
+
+    - uses: kustomize-set-image
+      as: update
+      config:
+        path: ./repo/${{ vars.overlayPath }}
+        images:
+          - image: ${{ vars.imageRepo }}
+            tag: ${{ imageFrom(vars.imageRepo).Tag }}
+
+    - uses: git-commit
+      as: commit
+      config:
+        path: ./repo
+        message: ${{ task.outputs.update.commitMessage }}
+
+    - uses: git-push
+      config:
+        path: ./repo
+        targetBranch: main
+
+    - uses: argocd-update
+      config:
+        apps:
+          - name: ${{ vars.argoApp }}
+            sources:
+              - repoURL: ${{ vars.gitopsRepo }}
+                desiredCommitFromStep: commit
